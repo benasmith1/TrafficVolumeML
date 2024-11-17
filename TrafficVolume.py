@@ -58,9 +58,9 @@ min_snow = min(default_df["snow_1h"])
 snow_diff = default_df["snow_1h"].sort_values().diff().dropna()
 snow_step = snow_diff[snow_diff != 0].min()
 
-days = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6}
+days = {"Monday": 0, "Tuesday": 1, "Wednesday": 2, "Thursday": 3, "Friday": 4, "Saturday": 5, "Sunday": 6} #typed with chatgpt
 
-months = {
+months = { #typed with chatgpt
     "January": 1, "February": 2, "March": 3, "April": 4,
     "May": 5, "June": 6, "July": 7, "August": 8,
     "September": 9, "October": 10, "November": 11, "December": 12
@@ -78,8 +78,8 @@ with st.sidebar.expander("Predict from form"):
         st.header("Enter The Traffic Details manually using the form below")        
         holiday = st.selectbox('Choose whether it is a holiday or not', options=holidays, help="")
         temp = st.slider('Average temperature in Kelvin', min_value=min_temp, max_value=max_temp, value=250.0, step=temp_step, help="°F = (K − 273.15) × 1.8 + 32")
-        rain_1h = st.slider('Amount in mm of rain that occurred in the hour', min_value=min_rain, max_value=max_rain, value=0.0, step=rain_step, help="")
-        snow_1h = st.slider('Amount in mm of snow that occurred in the hour', min_value=min_snow, max_value=max_snow, value=0.0, step=snow_step, help="")
+        rain_1h = st.slider('Amount in mm of rain that occurred in the hour', min_value=min_rain, max_value=max_rain, value=0.0, step=rain_step, help="rain in mm")
+        snow_1h = st.slider('Amount in mm of snow that occurred in the hour', min_value=min_snow, max_value=max_snow, value=0.0, step=snow_step, help="snow in mm")
         clouds_all = st.slider('Percentage of cloud cover', min_value=0, max_value=100, value=10, step=1, help="in %")
         weather_main = st.selectbox('Choose weather', options=weathers, help="The day's weather")
         month = st.selectbox('Choose month', options=months, help="")
@@ -150,7 +150,7 @@ elif file_input_bool: #if file input
     #submit_button = False
 
     traffic_test = pd.read_csv(file_input)
-    traffic_test = traffic_test.replace({"weekday": days})
+    traffic_test = traffic_test.replace({"weekday": days}) #https://sparkbyexamples.com/pandas/pandas-remap-values-in-column-with-a-dictionary-dict/ 
     traffic_test = traffic_test.replace({"month": months})
     traffic_test.rename(columns={"weekday": "day_of_week"}, inplace=True)
 
