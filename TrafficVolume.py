@@ -68,11 +68,11 @@ months = {
 
 submit_button_bool = False
 file_input_bool = False
-
+    
+st.sidebar.image("traffic_sidebar.jpg")
 
 # FORM INPUT
 with st.sidebar.expander("Predict from form"):
-    st.image("traffic_sidebar.jpg")
     # Sidebar for user inputs with an expander
     with st.form("user_inputs_form"):
         st.header("Enter The Traffic Details manually using the form below")        
