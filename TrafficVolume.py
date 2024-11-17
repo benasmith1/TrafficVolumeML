@@ -171,16 +171,16 @@ elif file_input_bool: #if file input
     preds = pd.Series(preds)
     preds = round(preds)
     traffic_test["Predicted Traffic Volume"] = preds
-    lower_limit = intervals[:, 0]
-    upper_limit = intervals[:, 1][0][0]
+
+    lower_limits = intervals[:, 0]
+    upper_limits = intervals[:, 1]
 
     # Ensure limits are within [0, infinity]
-    lower_limit = max(0, lower_limit[0][0])
-    lower_limit = round(lower_limit)
-    upper_limit = round(upper_limit)
+    lower_limits = [max(round(x[0]), 0) for x in lower_limits] #cottontail: Jan 24, 2023 at 21:04 https://stackoverflow.com/questions/25082410/apply-function-to-each-element-of-a-list 
+    upper_limits = [round(x[0]) for x in upper_limits]
 
-    traffic_test[f"Lower {(1-alpha)*100}% Pred Interval Limit"] = lower_limit
-    traffic_test[f"Upper {(1-alpha)*100}% Pred Interval Limit"] = upper_limit
+    traffic_test[f"Lower {(1-alpha)*100}% Pred Interval Limit"] = lower_limits
+    traffic_test[f"Upper {(1-alpha)*100}% Pred Interval Limit"] = upper_limits
 
     st.write("Scroll to the right of your dataframe below to view predicted hourly I-94 ATR 301 reported westbound traffic volume and prediction intervals.")
     st.write(traffic_test)
