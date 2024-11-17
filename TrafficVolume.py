@@ -13,7 +13,7 @@ warnings.filterwarnings('ignore')
 
 
 # Set up the app title and image
-st.title('Traffic Volume Predictor')
+st.markdown('''## :rainbow[Traffic Volume Predictor]''')
 st.image('traffic_image.gif', use_column_width = True, 
          caption = "Predict your traffic volume based on date time and conditions")
 
