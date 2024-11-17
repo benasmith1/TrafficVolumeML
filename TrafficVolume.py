@@ -106,11 +106,10 @@ if submit_button:
 if not(submit_button_bool) and not(file_input_bool):
     st.info("Please choose a data upload option in the sidebar")
 
-
+st.write("Adjust the alpha parameter to change the width of the displayed prediction interval")
 alpha = st.slider('Alpha', min_value=0.0, max_value=1.0, value=0.1, step=0.01, help="% Prediction Interval = 1-alpha.")
 
 if submit_button_bool: # If form input
-
 
     encode_df = default_df.copy()
 
@@ -133,14 +132,18 @@ if submit_button_bool: # If form input
     # Ensure limits are within [0, infinity]
     lower_limit = max(0, lower_limit[0][0])
 
+    # Round to nearest unit (vehilcle)
+    lower_limit = round(lower_limit)
+    upper_limit = round(upper_limit)
+    pred_value = round(pred_value)
+
     # Show the prediction on the app
     st.write("## Predicting Traffic Volume...")
 
     # Display results using metric card
-    st.metric(label = "Predicted Traffic Volume", value = f"{pred_value * 100:,.2f}")
-
+    st.metric(label = "Predicted Hourly I-94 ATR 301 reported westbound traffic volume", value = f"{(pred_value) * 100}")
     st.write(f"With a {(1-alpha)*100}% prediction interval:")
-    st.write(f"**Prediction Interval**: [{lower_limit* 100:,.2f}, {upper_limit* 100:,.2f}]")
+    st.write(f"**Prediction Interval**: [{(lower_limit)* 100}, {(upper_limit)* 100}]")
 
 elif file_input_bool: #if file input
     #submit_button = False
@@ -165,22 +168,26 @@ elif file_input_bool: #if file input
     #get predictions and prediction intervals
     preds, intervals = reg_model.predict(user_encoded_df, alpha = alpha)
     preds = pd.Series(preds)
-    traffic_test["traffic_volume"] = preds
+    preds = round(preds)
+    traffic_test["Predicted Traffic Volume"] = preds
     lower_limit = intervals[:, 0]
     upper_limit = intervals[:, 1][0][0]
 
     # Ensure limits are within [0, infinity]
     lower_limit = max(0, lower_limit[0][0])
+    lower_limit = round(lower_limit)
+    upper_limit = round(upper_limit)
 
     traffic_test[f"Lower {(1-alpha)*100}% Pred Interval Limit"] = lower_limit
     traffic_test[f"Upper {(1-alpha)*100}% Pred Interval Limit"] = upper_limit
 
+    st.write("Scroll to the right of your dataframe below to view predicted hourly I-94 ATR 301 reported westbound traffic volume and prediction intervals.")
     st.write(traffic_test)
 
 
 # Additional tabs for xGBoost model performance
 st.subheader("Model Insights")
-st.write("Below are illustrations of the model's performance on validation data.")
+st.write("Below are illustrations of the xGBoost model's performance on validation data.")
 tab1, tab2, tab3, tab4 = st.tabs(["Feature Importance", 
                             "Histogram of Residuals", 
                             "Predicted Vs. Actual", 
